@@ -3,21 +3,33 @@ package acceptance
 import (
 	. "github.com/onsi/ginkgo"
 	"github.com/onsi/gomega/gbytes"
-	"github.com/onsi/gomega/gexec"
 	"github.com/onsi/gomega/ghttp"
+	"github.com/pivotal-cf/om/commands"
 	"net/http"
-	"os/exec"
+	"time"
 
 	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("revert-staged-changes command", func() {
+var _ = FDescribe("revert-staged-changes command", func() {
 	var (
 		server *ghttp.Server
+		main   commands.Main
+		stdout *gbytes.Buffer
+		stderr *gbytes.Buffer
 	)
 
 	BeforeEach(func() {
 		server = createTLSServer()
+		stdout = gbytes.NewBuffer()
+		stderr = gbytes.NewBuffer()
+		main = commands.NewMain(
+			stdout,
+			stderr,
+			nil,
+			"",
+			time.Second,
+		)
 	})
 
 	It("reverts the staged changes on the Ops Manager", func() {
@@ -31,7 +43,7 @@ var _ = Describe("revert-staged-changes command", func() {
 			)...,
 		)
 
-		command := exec.Command(pathToMain,
+		err := main.Execute(
 			"--target", server.URL(),
 			"--username", "some-username",
 			"--password", "some-password",
@@ -39,12 +51,9 @@ var _ = Describe("revert-staged-changes command", func() {
 			"revert-staged-changes",
 		)
 
-		session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 		Expect(err).ToNot(HaveOccurred())
-
-		Eventually(session).Should(gexec.Exit(0))
 		Expect(ensureHandler.Handlers()).To(HaveLen(0))
-		Eventually(session.Out).Should(gbytes.Say("Changes Reverted."))
+		Eventually(stdout).Should(gbytes.Say("Changes Reverted."))
 	})
 
 	When("there are no changes to revert", func() {
@@ -59,7 +68,7 @@ var _ = Describe("revert-staged-changes command", func() {
 				)...,
 			)
 
-			command := exec.Command(pathToMain,
+			err := main.Execute(
 				"--target", server.URL(),
 				"--username", "some-username",
 				"--password", "some-password",
@@ -67,12 +76,10 @@ var _ = Describe("revert-staged-changes command", func() {
 				"revert-staged-changes",
 			)
 
-			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
 			Expect(err).ToNot(HaveOccurred())
 
-			Eventually(session).Should(gexec.Exit(0))
 			Expect(ensureHandler.Handlers()).To(HaveLen(0))
-			Eventually(session.Out).Should(gbytes.Say("No changes to revert."))
+			Eventually(stdout).Should(gbytes.Say("No changes to revert."))
 		})
 	})
 
@@ -88,7 +95,7 @@ var _ = Describe("revert-staged-changes command", func() {
 				)...,
 			)
 
-			command := exec.Command(pathToMain,
+			err := main.Execute(
 				"--target", server.URL(),
 				"--username", "some-username",
 				"--password", "some-password",
@@ -96,12 +103,8 @@ var _ = Describe("revert-staged-changes command", func() {
 				"revert-staged-changes",
 			)
 
-			session, err := gexec.Start(command, GinkgoWriter, GinkgoWriter)
-			Expect(err).ToNot(HaveOccurred())
-
-			Eventually(session).Should(gexec.Exit(1))
+			Expect(err).To(MatchError(ContainSubstring("revert staged changes command failed: request failed: unexpected response from /api/v0/staged")))
 			Expect(ensureHandler.Handlers()).To(HaveLen(0))
-			Eventually(session.Err).Should(gbytes.Say("revert staged changes command failed: request failed: unexpected response from /api/v0/staged"))
 		})
 	})
 })

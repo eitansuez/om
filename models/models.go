@@ -15,6 +15,13 @@ type Product struct {
 	Version string `json:"version"`
 }
 
+type ProductVersions struct {
+	Name              string
+	AvailableVersions []string
+	StagedVersion     string
+	DeployedVersion   string
+}
+
 type Errand struct {
 	Name              string `json:"name"`
 	PostDeployEnabled string `json:"post_deploy_enabled,omitempty"`

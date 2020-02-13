@@ -18,6 +18,10 @@ func NewJSONPresenter(stdout io.Writer) JSONPresenter {
 	}
 }
 
+func (j JSONPresenter) PresentProducts(products []models.ProductVersions) {
+	// no-op
+}
+
 func (j JSONPresenter) PresentAvailableProducts(products []models.Product) {
 	j.encodeJSON(products)
 }

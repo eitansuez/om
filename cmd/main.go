@@ -185,6 +185,7 @@ func Main(sout io.Writer, serr io.Writer, version string, applySleepDurationStri
 	commandSet["staged-director-config"] = commands.NewStagedDirectorConfig(api, stdout, stderr)
 	commandSet["staged-manifest"] = commands.NewStagedManifest(api, stdout)
 	commandSet["staged-products"] = commands.NewStagedProducts(presenter, api)
+	commandSet["products"] = commands.NewProducts(api, api, presenter)
 	commandSet["unstage-product"] = commands.NewUnstageProduct(api, stdout)
 	commandSet["upload-product"] = commands.NewUploadProduct(form, metadataExtractor, api, stdout)
 	commandSet["upload-stemcell"] = commands.NewUploadStemcell(form, api, stdout)

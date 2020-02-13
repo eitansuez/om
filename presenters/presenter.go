@@ -8,6 +8,7 @@ import (
 //counterfeiter:generate -o fakes/presenter.go --fake-name Presenter . Presenter
 
 type Presenter interface {
+	PresentProducts([]models.ProductVersions)
 	PresentAvailableProducts([]models.Product)
 	PresentCertificateAuthorities([]api.CA)
 	PresentCertificateAuthority(api.CA)
@@ -46,6 +47,11 @@ func NewPresenter(tablePresenter Presenter, jsonPresenter Presenter) *MultiPrese
 
 func (p *MultiPresenter) SetFormat(format string) {
 	p.format = format
+}
+
+// PresentProducts TODO: table-only for now
+func (p *MultiPresenter) PresentProducts(products []models.ProductVersions) {
+	p.tablePresenter.PresentProducts(products)
 }
 
 func (p *MultiPresenter) PresentAvailableProducts(products []models.Product) {

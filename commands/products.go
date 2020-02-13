@@ -65,13 +65,7 @@ func combinedProductVersions(availableProducts []models.Product,
 	availMap := map[string][]string{}
 
 	for _, p := range availableProducts {
-		if versions, ok := availMap[p.Name]; ok {
-			versions = append(versions, p.Version)
-			availMap[p.Name] = versions
-		} else {
-			versions := []string{p.Version}
-			availMap[p.Name] = versions
-		}
+		availMap[p.Name] = append(availMap[p.Name], p.Version)
 	}
 
 	stagedMap := map[string]string{}

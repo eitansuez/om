@@ -3,7 +3,6 @@ package presenters
 import (
 	"sort"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/olekukonko/tablewriter"
@@ -37,11 +36,7 @@ func (t TablePresenter) PresentProducts(products []models.ProductVersions) {
 	t.tableWriter.SetHeader([]string{"Name", "Available", "Staged", "Deployed"})
 
 	for _, product := range products {
-		availableVersion := ""
-		if len(product.AvailableVersions) > 0 {
-			availableVersion = strings.Join(product.AvailableVersions, ", ")
-		}
-		t.tableWriter.Append([]string{product.Name, availableVersion, product.StagedVersion, product.DeployedVersion})
+		t.tableWriter.Append([]string{product.Name, product.AvailableVersions, product.StagedVersion, product.DeployedVersion})
 	}
 
 	t.tableWriter.Render()

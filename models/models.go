@@ -17,7 +17,7 @@ type Product struct {
 
 type ProductVersions struct {
 	Name              string
-	AvailableVersions []string
+	AvailableVersions string
 	StagedVersion     string
 	DeployedVersion   string
 }

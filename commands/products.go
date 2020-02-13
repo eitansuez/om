@@ -98,9 +98,15 @@ func combinedProductVersions(availableProducts []models.Product,
 
 	productVersions := []models.ProductVersions{}
 	for name := range allProducts {
+
+		availableVersions := ""
+		if len(availMap[name]) > 0 {
+			availableVersions = strings.Join(availMap[name], ", ")
+		}
+
 		productVersions = append(productVersions, models.ProductVersions{
 			Name:              name,
-			AvailableVersions: availMap[name],
+			AvailableVersions: availableVersions,
 			StagedVersion:     stagedMap[name],
 			DeployedVersion:   deployedMap[name],
 		})

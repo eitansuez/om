@@ -14,7 +14,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var _ = FDescribe("Products", func() {
+var _ = Describe("Products", func() {
 	var (
 		apService     *fakes.AvailableProductsService
 		drService     *fakes.DiagnosticReportService

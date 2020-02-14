@@ -55,6 +55,7 @@ for this product.
 | [pending-changes](pending-changes/README.md) | checks for pending changes |
 | [pre-deploy-check](pre-deploy-check/README.md) | checks completeness and validity of product configuration |
 | [product-metadata](product-metadata/README.md) | prints product metadata |
+| [products](products/README.md) | list available, staged, and deployed products |
 | [regenerate-certificates](regenerate-certificates/README.md) | deletes all non-configurable certificates in Ops Manager so they will automatically be regenerated on the next apply-changes |
 | [revert-staged-changes](revert-staged-changes/README.md) | This command reverts the staged changes already on an Ops Manager. |
 | [ssl-certificate](ssl-certificate/README.md) | gets certificate applied to Ops Manager |
